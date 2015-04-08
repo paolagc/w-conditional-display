@@ -68,7 +68,6 @@ class widget_schedule extends WP_Widget {
 	 */
 	public function widget( $args, $instance ) {
 		extract( $args );
-    	extract($instance);
 
 		$title = apply_filters('widget_title', $instance['title'] );
 
@@ -78,12 +77,24 @@ class widget_schedule extends WP_Widget {
 		if ( $title )
 		    print $before_title . $title . $after_title;
 
-		var_dump( $instance );
-
 		$default = $instance['default_message'];
+		$start = strtotime(str_replace('/', '-',$instance['datetimepicker_start']));
+		$end = strtotime(str_replace('/', '-',$instance['datetimepicker_end']));
+		$message = $instance['display_message'];
+
+
+		$current_time = strtotime(str_replace('/', '-',current_time('y/m/d h:m')));
+
+		if($current_time > $start && $current_time < $end){
+			$display = $message;
+		}
+		else{
+			$display = $default;
+		}
+
 		print '<h2>
 				<div class="btn btn-over gray-btn"><span class="icons-schedule"></span></div>'.
- 				$default
+ 				$display
  			  .'</h2>';
 	}	
 }
